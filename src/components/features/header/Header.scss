@@ -1,0 +1,42 @@
+.ant-card-head {
+    min-height: 0px !important;
+    .ant-card-head-title {
+      padding: 0px !important;
+      margin: 10px !important
+    }
+  }
+  
+  .ant-layout-header {
+    height: 0px !important;
+    line-height: 0px !important;
+    padding: 0px !important;
+  }
+  
+  .app-header {
+    background: #ffffff;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 !important;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    border-bottom: 1px solid rgb(211, 211, 211);
+  
+    .headerClass {
+      height: 60px;
+      background: #ffffff;
+      border-bottom: 1px solid rgb(211, 211, 211);
+    }
+  
+    .pdf-header {
+      background: #ffffff;
+      display: none;
+    }
+  
+    .header-logo {
+      height: 35px;
+      padding-left: 16px;
+    }
+  }
