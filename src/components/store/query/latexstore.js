@@ -1,14 +1,7 @@
-import { useState, useEffect } from 'react';
-import Chats from './Chats';
-import { useNavigate } from 'react-router-dom';
-import './Chatbot.scss'
-import PdfHighlighter from './PdfHighlighter';
-import Trail from '../../Trail';
+import { createSlice } from '@reduxjs/toolkit'
 
-
-function Chatbot() {
- 
-    const [latexCode, setLatexCode] = useState(String.raw`
+const initialState = {
+    latex: String.raw`
     
 
     \documentclass[letterpaper,11pt]{article}
@@ -124,36 +117,24 @@ function Chatbot() {
     
   
     
-      `);
+      `,
+    error: "",
+    status: "idle",
     
-
-    const [showAskVal, setShowAskVal] = useState(true);
-
-
-
-    const [path, setFilePath] = useState('');
-
-    return (
-        <div>
-            {/* <div style={{ textAlign: 'end' }}>
-                <Button type='primary'
-                    style={{ height: 'inherit', padding: 2 }}
-                    >
-                        <Popconfirm title="Sure to go back?" onConfirm={goBack}>
-                        <LeftSquareOutlined /> Go Back</Popconfirm></Button>
-            </div> */}
-            <div className="chatbot-container">
-                <div className={showAskVal ? 'chatbot-chat' : 'chatbot-pdf-ask-val-collapse'}>
-                    <Chats showAskVal={showAskVal} setShowAskVal={setShowAskVal} setLatexCode = {setLatexCode} latexCode={latexCode}/>
-                </div>
-
-            
-                <PdfHighlighter latexCode={latexCode} setLatexCode = {setLatexCode}/>
-                {/* <Trail latexCode={latexCode}/> */}
-
-            </div>
-        </div>
-    )
 }
 
-export default Chatbot
+const latexstore = createSlice({
+  name: "latexstore",
+  initialState,
+  reducers: {
+    addlatex: (state, action) => {
+        const temp = `${state.latex}   
+        ${action.payload} -`;
+        state.latex = temp;
+    },
+  }
+});
+
+export const {addlatex} = latexstore.actions
+
+export default latexstore.reducer

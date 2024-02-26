@@ -1,3 +1,4 @@
+import ace from 'ace-builds';
 var runlatex={}
 
 runlatex.texts ={
@@ -61,7 +62,7 @@ const makeglossariesregex = /% *!TEX.*[^a-zA-Z](makeglossaries(-light)?) *\n/i;
 const makeindexregex = /% *!TEX.*[^a-zA-Z]makeindex( [a-z0-9\.\- ]*)\n/ig;
 
 
-var latexcompetions="";
+var latexcompletions="";
     
 
 var customCompleter = {
@@ -88,6 +89,7 @@ var customCompleter = {
 }
 
 function llexamples() {
+
     if(runlatex.completionsURI != ""){
 	let request = new XMLHttpRequest();
 	request.open('GET', runlatex.completionsURI);
@@ -98,6 +100,7 @@ function llexamples() {
 	}
 	request.send();
     }
+	
     var p = document.getElementsByTagName("pre");
     var editor;
     var acemode;
@@ -105,6 +108,7 @@ function llexamples() {
 	acemode="ace/mode/latex";
 	p[i].setAttribute("id","pre" + i);
 	var pretext=p[i].innerText;
+	console.log(p);
 	if(!pretext.match(noeditregex) && !p[i].classList.contains('noedit')) {
 	    if((runlatex.adddefaultpreamble &&
 		(pretext.match(norunregex) || (pretext.match(/\n[^\n]/g) || '').length + 1  < runlatex.minrunlines )) ||
@@ -133,6 +137,7 @@ function llexamples() {
 		    r.setAttribute("class","llbutton");
 		    r.setAttribute("onclick",'latexcgi("pre' + i + '")');
 		    r.setAttribute("id","lo-pre" + i);
+			console.log(r,"r");
 		    p[i].parentNode.insertBefore(r, p[i].nextSibling);
 		    var f2=document.createElement("span");
 		    f2.innerHTML="<form style=\"display:none\" id=\"form2-pre" + i +
@@ -174,7 +179,7 @@ function llexamples() {
 	    editor.commands.bindKey("Tab", null)
 	    editor.commands.bindKey("Shift-Tab", null)
 	    if(runlatex.completionsURI != ""){
-		langTools=ace.require("ace/ext/language_tools");
+		var langTools=ace.require("ace/ext/language_tools");
 		langTools.setCompleters([customCompleter]);
 		editor.setOptions({
 		    enableBasicAutocompletion: true,
@@ -236,13 +241,13 @@ function openinoverleaf(nd) {
     if(typeof(runlatex.preincludes) == "object") {
 	if(typeof(runlatex.preincludes[nd]) == "object") {
 	    var incl=runlatex.preincludes[nd];
-	    for(prop in incl) {
-		if(editors[prop]==null) {
-		    addinput(fm,"encoded_snip[]",document.getElementById(prop).textContent);
+	    for(p in incl) {
+		if(editors[p]==null) {
+		    addinput(fm,"encoded_snip[]",document.getElementById(p).textContent);
 		} else {
-		    addinput(fm,"encoded_snip[]",editors[prop].getValue());
+		    addinput(fm,"encoded_snip[]",editors[p].getValue());
 		}
-		addinput(fm,"snip_name[]",incl[prop]);
+		addinput(fm,"snip_name[]",incl[p]);
 	    }
 	}
     }
@@ -322,11 +327,15 @@ function defaultengine(t) {
 	} else return rldefaultengine;
 }
 
-function latexcgi(nd) {
+function latexcgi(nd,code) {
+	// console.log(nd);
     var fm = document.getElementById('form2-' + nd);
+	
     fm.innerHTML="";
-    var p = document.getElementById(nd);
-    var t = editors[nd].getValue();
+    var p = document.getElementById(nd);	
+    var t = code
+	console.log(t,"t");
+	
     var engv=rldefaultengine;
     var eng=t.match(engineregex);
     if(runlatex.adddefaultpreamble) {
@@ -339,13 +348,13 @@ function latexcgi(nd) {
     if(typeof(runlatex.preincludes) == "object") {
 	if(typeof(runlatex.preincludes[nd]) == "object") {
 	    var incl=runlatex.preincludes[nd];
-	    for(prop in incl) {
-		if(editors[prop]==null) {
-		    addtextarea(fm,"filecontents[]",document.getElementById(prop).textContent);
+	    for(p in incl) {
+		if(editors[p]==null) {
+		    addtextarea(fm,"filecontents[]",code);
 		} else {
-		    addtextarea(fm,"filecontents[]",editors[prop].getValue());
+		    addtextarea(fm,"filecontents[]",code);
 		}
-		addinputnoenc(fm,"filename[]",incl[prop]);
+		addinputnoenc(fm,"filename[]",incl[p]);
 	    }
 	}
     }
@@ -390,7 +399,7 @@ function latexcgi(nd) {
 	ifr.setAttribute("id",nd + "ifr");
 	ifr.setAttribute("name",nd + "ifr");
 	p.parentNode.insertBefore(ifr, b.nextSibling);
-	d=document.createElement("button");
+	const d=document.createElement("button");
 	d.innerText=runlatex.texts["Delete Output"];
         d.setAttribute("class","llbutton");
 	d.setAttribute("id","del-" + nd);
@@ -433,10 +442,10 @@ var createCookie = function(name, value, days) {
 
 function getCookie(c_name) {
     if (runlatex.usecookies && document.cookie.length > 0) {
-        c_start = document.cookie.indexOf(c_name + "=");
+        var c_start = document.cookie.indexOf(c_name + "=");
         if (c_start != -1) {
             c_start = c_start + c_name.length + 1;
-            c_end = document.cookie.indexOf(";", c_start);
+            var c_end = document.cookie.indexOf(";", c_start);
             if (c_end == -1) {
                 c_end = document.cookie.length;
             }
@@ -480,3 +489,5 @@ function rlDeleteCookies() {
 var rlallowcookies=getCookie('runlatex-cookies')=="true";
 
 window.addEventListener('load', llexamples, false);
+
+export {llexamples,latexcgi}

@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from "react";
 import "./Chatbot.scss";
 import { addmsg } from "../../store/query/Messages";
 import { sendQuerydata } from "../../store/query/sendquery";
+import { addlatex } from "../../store/query/latexstore";
 
 const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) => {
   const [isTyping, setIsTyping] = useState(false);
@@ -47,10 +48,10 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
           "content" : queryResponseDetails.queryResponse.content,
         })
         setChats(msgs)
-        const temp = `${latexCode} 
-        ${queryResponseDetails.queryResponse.content} \end{document}`;
-        console.log(temp);
-        setLatexCode(temp)
+        console.log(queryResponseDetails.queryResponse.content);
+        
+        dispatch(addlatex(queryResponseDetails.queryResponse.content))
+        
       }
      
     }

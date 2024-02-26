@@ -60,7 +60,7 @@ export const sendQuerydata = createAsyncThunk(
       return {
         role : "ASSISTANT",
         content : String.raw`
-        '''latex
+        
       \begin{center}
 	{\Huge \scshape Bandi Hemanth} \\ \vspace{1pt}
 	Palakollu, Andhra Pradesh \\ \vspace{1pt}
@@ -76,7 +76,7 @@ export const sendQuerydata = createAsyncThunk(
 	\vspace{-8pt}
 	\vspace{-8pt}
 \end{center}
-'''`}
+`}
     } catch (error) {
       throw error;
     }
