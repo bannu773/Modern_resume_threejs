@@ -119,6 +119,10 @@
   background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
 }
 
+iframe{
+  height: 80vh !important;
+}
+
 .orange-text-gradient {
   background: #f12711; /* fallback for old browsers */
   background: -webkit-linear-gradient(

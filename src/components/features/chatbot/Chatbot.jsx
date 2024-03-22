@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import './Chatbot.scss'
 import PdfHighlighter from './PdfHighlighter';
 import Trail from '../../Trail';
+import { Flex } from 'antd';
+import { Avatar, Space } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 
 function Chatbot() {
- 
-    const [latexCode, setLatexCode] = useState(String.raw`
+
+  const [latexCode, setLatexCode] = useState(String.raw`
     
 
     \documentclass[letterpaper,11pt]{article}
@@ -125,35 +128,32 @@ function Chatbot() {
   
     
       `);
-    
-
-    const [showAskVal, setShowAskVal] = useState(true);
 
 
+  const [showAskVal, setShowAskVal] = useState(true);
 
-    const [path, setFilePath] = useState('');
 
-    return (
-        <div>
-            {/* <div style={{ textAlign: 'end' }}>
-                <Button type='primary'
-                    style={{ height: 'inherit', padding: 2 }}
-                    >
-                        <Popconfirm title="Sure to go back?" onConfirm={goBack}>
-                        <LeftSquareOutlined /> Go Back</Popconfirm></Button>
-            </div> */}
-            <div className="chatbot-container">
-                <div className={showAskVal ? 'chatbot-chat' : 'chatbot-pdf-ask-val-collapse'}>
-                    <Chats showAskVal={showAskVal} setShowAskVal={setShowAskVal} setLatexCode = {setLatexCode} latexCode={latexCode}/>
-                </div>
-
-            
-                <PdfHighlighter latexCode={latexCode} setLatexCode = {setLatexCode}/>
-                {/* <Trail latexCode={latexCode}/> */}
-
-            </div>
+  return (
+    <div style={{backgroundColor:"blueviolet"}}>
+      <Flex justify='space-between' style={{height:"8vh",zIndex:10,boxShadow: '0px 0px 10px white'}}>
+        <div className='flex items-center font-bold text-2xl ml-3'>
+          AUTO RESUME
         </div>
-    )
+        <div className='flex items-center mr-3'>
+          <Avatar size={50} icon={<UserOutlined />} />
+        </div>
+      </Flex>
+      <div>
+        <div className="chatbot-container">
+
+          <div className={showAskVal ? 'chatbot-chat' : 'chatbot-pdf-ask-val-collapse'}>
+            <Chats showAskVal={showAskVal} setShowAskVal={setShowAskVal} setLatexCode={setLatexCode} latexCode={latexCode} />
+          </div>
+          <PdfHighlighter latexCode={latexCode} setLatexCode={setLatexCode} />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Chatbot

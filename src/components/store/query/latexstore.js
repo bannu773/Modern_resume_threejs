@@ -129,7 +129,7 @@ const latexstore = createSlice({
   reducers: {
     addlatex: (state, action) => {
         const temp = `${state.latex}   
-        ${action.payload} -`;
+        ${action.payload}`;
         state.latex = temp;
     },
   }

@@ -22,6 +22,7 @@ const Land = () => {
                 </div>
                 <div className="relative">
                     {/* <TimeLine /> */}
+           
                 </div>
                 <div className="relative z-0">
                     <Contact />

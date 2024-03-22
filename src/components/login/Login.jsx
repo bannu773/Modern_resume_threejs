@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Login.css";
+// import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 // import logingif from "../../assets/undraw_stand_out_-1-oag.svg";
 import { LoginService, forgotPasswordLinkService } from "../../services/AuthService";

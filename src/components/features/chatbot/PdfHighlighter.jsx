@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {latexcgi} from './runlatex.js'
 import { useSelector } from "react-redux";
+import { Button } from "antd";
 
 
 function PdfHighlighter({ showAskVal }) {
   const [pdf, setPdf] = useState(false);
   const latexCode = useSelector((state) => state.latex.latex);
-  console.log(latexCode);
 
-  useEffect(() => {
-    // window.location.reload();
-  
-  }, [latexCode])
+  // useEffect(() => {
+  //   if(latexCode !== null){
+  //     latexcgi("pre0",`${latexCode} \\end{document}`)
+  //   }
+  // }, [latexCode])
 
   return (
     <>
@@ -21,7 +22,11 @@ function PdfHighlighter({ showAskVal }) {
             {latexCode}
           </pre>
         </div>
-        <button onClick={() => latexcgi("pre0",`${latexCode} \\end{document}`)} style={{color : "black"}}>Click me</button>
+     
+        <Button onClick={() => latexcgi("pre0",`${latexCode} \\end{document}`)} size="large" style={{color:"wheat"}}> 
+        Generate PDF
+        </Button>
+        
       </div>
     </>
   );

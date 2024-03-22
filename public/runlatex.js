@@ -94,7 +94,7 @@ function llexamples() {
 	request.responseType = 'json';
 	request.onload = function() {
 	    latexcompletions = request.response;
-		console.log(latexcompletions);
+		// console.log(latexcompletions);
 	}
 	request.send();
     }
@@ -183,6 +183,11 @@ function llexamples() {
 	    }
 	    editor.resize();
 	    editors["pre" + i]=editor;
+		var c = document.getElementsByClassName("llbutton")
+		c[0].style.display = "none"
+		c[1].style.display = "none"
+		var d = document.getElementById("pre0")
+		d.style.display = "none"
 	}
     }
 }

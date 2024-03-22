@@ -19,7 +19,17 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
     useSelector((state) => state.msgs.messages)
   );
 
-
+  const extractData = (data) => {
+    const regex = /```latex\s*(.*?)```/gs;
+    const matches = data.match(regex);
+ 
+    if (matches && matches.length > 0) {
+   
+      return matches[0]?.replace(/```latex\s*/gs, '')?.replace(/```/gs,"");
+    } else {
+      return '';
+    }
+  };
   const [message, setMessage] = useState();
   const chatEl = useRef(null);
   const dispatch = useDispatch();
@@ -37,9 +47,10 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
       });
     }
   }, []);
+
   useEffect(() => {
     if (queryResponseDetails.queryResponse != {}) {
-      console.log(queryResponseDetails.queryResponse);
+    
       if (queryResponseSuccess) {
         dispatch(addmsg({ query: queryResponseDetails.queryResponse }));
         let msgs = [...chats];
@@ -48,10 +59,12 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
           "content" : queryResponseDetails.queryResponse.content,
         })
         setChats(msgs)
-        console.log(queryResponseDetails.queryResponse.content);
-        
-        dispatch(addlatex(queryResponseDetails.queryResponse.content))
-        
+       
+        const extractedlatex = extractData(queryResponseDetails.queryResponse.content);
+        if(extractedlatex !== ''){
+          
+          dispatch(addlatex(extractedlatex));
+        }
       }
      
     }
@@ -92,7 +105,7 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
         <div className="chat-container">
           <div className="chat-header">
             <div
-              style={{ fontSize: "large", color: "#14487F", fontWeight: "600" }}
+              style={{ fontSize: "large", fontWeight: "600" }}
             >
               {" "}
               <RightOutlined onClick={() => setShowAskVal(!showAskVal)} />{" "}
@@ -119,7 +132,7 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                 </li>
                 {chats && chats.length
                   ? chats.map((chat, index) => {
-                      if (chat.role.toUpperCase() === "USER" && index > 18) {
+                      if (chat.role.toUpperCase() === "USER" && index > 23) {
                         return (
                           <li key={index} className="message right spacing">
                             <span></span>
@@ -162,7 +175,7 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                     className="send-btn"
                     onClick={(e) => chatsecure(e, message)}
                   >
-                    <SendOutlined rotate={270} style={{ color: "#ffffff" }} />
+                    <SendOutlined rotate={0} style={{ color: "#ffffff" }} />
                   </Button>
                 </div>
               </div>
