@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit"
 
 const initialState = {
     messages : [
-      {"role": "user", "content": "Assume you're a resume builder and have to generate LaTeX code whenever a user asks for it."},
+      {"role": "user", "content": "Assume you're a resume builder and have to generate LaTeX code  along with section heading whenever a user asks for it."},
       {"role" : "user", "content" : "The generated LaTeX code is compiled using a compiler and displayed to the user as a PDF. The user is unaware of the internal workings and code generation process. Therefore, when generating code, assume that it is translated into a PDF, and provide instructions to the user based on the visual representation rather than the underlying LaTeX code."},
       {
           "role" : "user",
