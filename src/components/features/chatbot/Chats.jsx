@@ -11,7 +11,8 @@ import { useEffect, useState, useRef } from "react";
 import "./Chatbot.scss";
 import { addmsg } from "../../store/query/Messages";
 import { sendQuerydata } from "../../store/query/sendquery";
-import { addlatex } from "../../store/query/latexstore";
+import { addSkills, addCertifications, addEducation, addExperince, addHeading, addProjects, addachievement, addlatex } from "../../store/query/latexstore";
+
 
 const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) => {
   const [isTyping, setIsTyping] = useState(false);
@@ -26,6 +27,21 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
     if (matches && matches.length > 0) {
    
       return matches[0]?.replace(/```latex\s*/gs, '')?.replace(/```/gs,"");
+    } else {
+      return '';
+    }
+  };
+  const extractEachSectionData = (data) => {
+    
+    const regex = /----------\s*(.*?)----------/gs;
+    
+    const matches = data.match(regex);
+    if (matches && matches.length > 0) {
+   
+      const newText =  matches[0]?.replace(/\s*/gs, '')?.replace(/```/gs,"");
+      const regexHead = /^-+|-+$/g;
+      // Replace matching hyphens with an empty string
+      return matches[0]?.replace(regexHead, '');
     } else {
       return '';
     }
@@ -61,12 +77,46 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
         setChats(msgs)
        
         const extractedlatex = extractData(queryResponseDetails.queryResponse.content);
+      
+        const eachSectionHeading =  extractEachSectionData(extractedlatex);
+        console.log(eachSectionHeading ,extractedlatex );
         if(extractedlatex !== ''){
-          
-          dispatch(addlatex(extractedlatex));
+           switch (eachSectionHeading) {
+            case "HEADING":
+               dispatch(addHeading(extractedlatex));
+              break;
+            case "EDUCATION":
+              console.log("education reducx");
+              dispatch(addEducation(extractedlatex));
+              break;
+            case "EXPERIENCE":
+              dispatch(addExperince(extractedlatex));
+              break;
+            case "PROJECTS":
+              dispatch(addProjects(extractedlatex));
+              break;
+            case "Achievements":
+              dispatch(addachievement(extractedlatex));
+              break;
+            case "CERTIFICATES":
+              dispatch(addCertifications(extractedlatex));
+              break;
+            case "PROGRAMMINGSKILLS":
+            case "Technical Skills":
+            case "TechnicalSkills":
+            case "Programming Skills":
+            case "TECHNICALSKILLS":
+              dispatch(addSkills(extractedlatex));
+              break;
+            default:
+              dispatch(addlatex(extractedlatex));
+              break;
+           }
+           dispatch(addlatex(extractedlatex));
         }
+        
       }
-     
+      
     }
   }, [queryResponseSuccess]);
 

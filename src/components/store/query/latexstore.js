@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    latex: String.raw`
-    
+  latex: String.raw`
+
 
     \documentclass[letterpaper,11pt]{article}
   
@@ -118,23 +118,59 @@ const initialState = {
   
     
       `,
-    error: "",
-    status: "idle",
-    
-}
+  heading: null,
+  educaation: null,
+  experience: null,
+  skills: null,
+  certifications: null,
+  projects: null,
+  achievements: null,
+  error: "",
+  status: "idle",
+};
 
 const latexstore = createSlice({
   name: "latexstore",
   initialState,
   reducers: {
-    addlatex: (state, action) => {
-        const temp = `${state.latex}   
-        ${action.payload}`;
-        state.latex = temp;
+    addHeading: (state, action) => {
+      state.heading = action.payload;
     },
-  }
+    addEducation: (state, action) => {
+      state.educaation = action.payload;
+    },
+    a: (state, action) => {
+      state.skills = action.payload;
+    },
+    addExperince: (state, action) => {
+      state.experience = action.payload;
+    },
+    addCertifications: (state, action) => {
+      state.certifications = action.payload;
+    },
+    addProjects: (state, action) => {
+      state.projects = action.payload;
+    },
+    addachievement: (state, action) => {
+      state.achievements = action.payload;
+    },
+    addlatex: (state, action) => {
+      const temp = `${state.latex}   
+        ${action.payload}`;
+      state.latex = temp;
+    },
+  },
 });
 
-export const {addlatex} = latexstore.actions
+export const {
+  addlatex,
+  addCertifications,
+  addEducation,
+  addExperince,
+  addachievement,
+  addSkills,
+  addProjects,
+  addHeading,
+} = latexstore.actions;
 
-export default latexstore.reducer
+export default latexstore.reducer;

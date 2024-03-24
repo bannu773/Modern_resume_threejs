@@ -77,12 +77,10 @@ export const SignUpService =  async(signupData)=>{
 
         const res = await axios.post(`${BASE_URL}resetpassword/${value.id}`, changePasswordData); 
         if(res.data.success === true) {
-            console.log("lll")
             message.success(res.data.message)
         }else{
             message.error(res.data.message)
         }
-        
         return res.data;
     }
     catch(error){ 
