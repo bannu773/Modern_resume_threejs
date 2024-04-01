@@ -12,7 +12,6 @@ const initialState = {
 };
 
 
-
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true
@@ -39,6 +38,7 @@ export const sendQuerydata = createAsyncThunk(
 
       ///////////////////////////////////////////////////// GEMINI PRO ////////////////////////////////////////////////////
 
+
       // console.log("Starting chat")
       // const chat = model.startChat({
       //   history: msgs.msgs,
@@ -49,7 +49,6 @@ export const sendQuerydata = createAsyncThunk(
       //     topK: 16,
       //   },
       // });
-
 
       // console.log("Chat started",chat.history)
       // const msg = "How many paws are in my house?";

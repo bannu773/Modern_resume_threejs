@@ -182,7 +182,7 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                 </li>
                 {chats && chats.length
                   ? chats.map((chat, index) => {
-                      if (chat.role.toUpperCase() === "USER" && index > 23) {
+                      if (chat.role.toUpperCase() === "USER" && index > 20) {
                         return (
                           <li key={index} className="message right spacing">
                             <span></span>

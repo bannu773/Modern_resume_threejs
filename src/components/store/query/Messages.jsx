@@ -4,7 +4,6 @@ import {createSlice} from "@reduxjs/toolkit"
 const initialState = {
     messages : [
       {"role": "user", "content": "Assume you're a resume builder and have to generate LaTeX code  along with section heading whenever a user asks for it."},
-      {"role" : "user", "content" : "The generated LaTeX code is compiled using a compiler and displayed to the user as a PDF. The user is unaware of the internal workings and code generation process. Therefore, when generating code, assume that it is translated into a PDF, and provide instructions to the user based on the visual representation rather than the underlying LaTeX code."},
       {
           "role" : "user",
           "content" : "I would like to provide you with a specific format assume it is the standard format of the resume that you have create.  Then you can start making resume using that standard format"
@@ -131,22 +130,8 @@ const initialState = {
       1. Wrap the generated code within <latex> tags, as shown below:
         <latex>''Insert code in this Tag''</latex>
 
-      2. Provide instructions to the user based on the compiled PDF outcome, rather than the details of the generated LaTeX code within the tags.
-
-      This ensures consistency in code presentation and instructs the user based on the visual representation in the compiled PDF.
-
     `},
-    {"role" : "user","content" : `Whenever the user asks for an update, follow these steps:
-
-      1. Begin by providing the original LaTeX code enclosed in <prelatex> tags:
-        <prelatex>''Insert the Old Code''</prelatex>
-
-      2. After this, generate the new LaTeX code within <latex> tags:
-        <latex>''Insert the Updated Code here''</latex>
-
-      Ensure clarity and accuracy in presenting both the old and updated LaTeX code.
-
-    `},
+    
         {"role" : "user" , "content" : "Assume the generated latex code will follow the standard format, It initially consists of the above standard format code ."},
         {"role": "system", "content": "I will ask the user to enter details for each section. This is the order for the sections:"},
          {"role": "system", "content": "1. Heading - This includes name, city, state, phone number, email, LinkedIn, GitHub, LeetCode account, GeekforGeeks account link, and portfolio link."},
@@ -312,11 +297,7 @@ const initialState = {
         ` },
         {
           "role" : "user",
-          "content" : "I have provided the standard format code starting after \begin{document}. Begin by asking for the heading section. After generating the heading section, proceed to ask about other sections "
-        },
-        {
-          "role" : "user",
-          "content" : "When the user asks to generate a PDF, You have to Say Generating PDF instead of Generating Latex Code. "
+          "content" : "I have provided the standard format code starting after \begin{document}. Begin by asking for the heading section. After generating the heading section generate the latex code."
         },
         {
           "role" : "user",
@@ -328,8 +309,9 @@ const initialState = {
         },
         {
           "role" : "user",
-          "content" : "Please follow my Template and ask the user about each thing when user starts interacting. the user Don,t Know About the latex Code so ask the things in high level. When one Section Completed generate the Latex code it will Compile your generated latex code and show like a PDF to Users. Remember your a chat bot that you only permit to make Resumes no other things."
-        }
+          "content" : "Please follow my Template and ask the user about each thing when user starts interacting."
+        },
+        
       ],
 };
 

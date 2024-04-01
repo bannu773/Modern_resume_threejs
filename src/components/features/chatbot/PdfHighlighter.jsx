@@ -6,24 +6,39 @@ import { Button } from "antd";
 
 function PdfHighlighter({ showAskVal }) {
   const [pdf, setPdf] = useState(false);
-  const latexCode = useSelector((state) => state.latex.latex);
+  const latexCode = useSelector((state) => state.latex);
+  const [latex, setLatex] = useState("");
+  useEffect(() => {
+    const latexx = `
+      ${latexCode.format}
+      ${latexCode.heading}
+      ${latexCode.educaation}
+      ${latexCode.experience}
+      ${latexCode.skills}
+      ${latexCode.certifications}
+      ${latexCode.projects}
+      ${latexCode.achievements}
 
+    `
+    setLatex(latexx);
+  
+  }, [latexCode]);
   // useEffect(() => {
   //   if(latexCode !== null){
   //     latexcgi("pre0",`${latexCode} \\end{document}`)
   //   }
   // }, [latexCode])
-
+  console.log(latexCode.format);
   return (
     <>
       <div className={showAskVal ? 'chatbot-pdf' : 'pdf-viewer-ask-val-collapse'}>
         <div class="h" style={{color : "black"}}>
           <pre>
-            {latexCode}
+            {latex}
           </pre>
         </div>
      
-        <Button onClick={() => latexcgi("pre0",`${latexCode} \\end{document}`)} size="large" style={{color:"wheat"}}> 
+        <Button onClick={() => latexcgi("pre0",`${latex} \\end{document}`)} size="large" style={{color:"wheat"}}> 
         Generate PDF
         </Button>
         
