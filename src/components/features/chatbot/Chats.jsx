@@ -11,11 +11,25 @@ import { useEffect, useState, useRef } from "react";
 import "./Chatbot.scss";
 import { addmsg } from "../../store/query/Messages";
 import { sendQuerydata } from "../../store/query/sendquery";
-import { addSkills, addCertifications, addEducation, addExperince, addHeading, addProjects, addachievement, addlatex } from "../../store/query/latexstore";
+import {
+  addSkills,
+  addCertifications,
+  addEducation,
+  addExperince,
+  addHeading,
+  addProjects,
+  addachievement,
+  addlatex,
+} from "../../store/query/latexstore";
+import DotTypingAnimation from "./AnimatedDots";
 
-
-const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) => {
-  const [isTyping, setIsTyping] = useState(false);
+const KrollSecureChat = ({
+  showAskVal,
+  setShowAskVal,
+  setLatexCode,
+  latexCode,
+}) => {
+  // const [isTyping, setIsTyping] = useState(false);
   const [chats, setChats] = useState(
     useSelector((state) => state.msgs.messages)
   );
@@ -23,34 +37,40 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
   const extractData = (data) => {
     const regex = /```latex\s*(.*?)```/gs;
     const matches = data.match(regex);
- 
+
     if (matches && matches.length > 0) {
-   
-      return matches[0]?.replace(/```latex\s*/gs, '')?.replace(/```/gs,"");
+      return matches[0]?.replace(/```latex\s*/gs, "")?.replace(/```/gs, "");
     } else {
-      return '';
+      return "";
     }
   };
   const extractEachSectionData = (data) => {
-    
     const regex = /----------\s*(.*?)----------/gs;
-    
+
     const matches = data.match(regex);
     if (matches && matches.length > 0) {
-   
-      const newText =  matches[0]?.replace(/\s*/gs, '')?.replace(/```/gs,"");
+      const newText = matches[0]?.replace(/\s*/gs, "")?.replace(/```/gs, "");
       const regexHead = /^-+|-+$/g;
       // Replace matching hyphens with an empty string
-      return matches[0]?.replace(regexHead, '');
+      return matches[0]?.replace(regexHead, "");
     } else {
-      return '';
+      return "";
+    }
+  };
+  const extractMessageFromOutput = (data) => {
+    const regex = /```latex\s*(.*?)```([\s\S]*)/gs;
+    const matches = regex.exec(data);
+    if (matches && matches.length > 0) {
+      return matches[2]?.trim();
+    } else {
+      return "";
     }
   };
   const [message, setMessage] = useState();
   const chatEl = useRef(null);
   const dispatch = useDispatch();
   const queryResponseDetails = useSelector((state) => state.query);
-  const { status, error, queryResponse } = queryResponseDetails;
+  const { status, error,isTyping, queryResponse } = queryResponseDetails;
   const queryResponseError = status === "failed" && error !== null;
   const queryResponseSuccess =
     status === "success" && Object.keys(queryResponse).length > 0;
@@ -66,24 +86,40 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
 
   useEffect(() => {
     if (queryResponseDetails.queryResponse != {}) {
-    
       if (queryResponseSuccess) {
-        dispatch(addmsg({ query: queryResponseDetails.queryResponse }));
-        let msgs = [...chats];
-        msgs.push({
-          "role" : queryResponseDetails.queryResponse.role,
-          "content" : queryResponseDetails.queryResponse.content,
-        })
-        setChats(msgs)
-       
-        const extractedlatex = extractData(queryResponseDetails.queryResponse.content);
-      
-        const eachSectionHeading =  extractEachSectionData(extractedlatex);
-        console.log(eachSectionHeading ,extractedlatex );
-        if(extractedlatex !== ''){
-           switch (eachSectionHeading) {
+        if (
+          extractMessageFromOutput(
+            queryResponseDetails.queryResponse.content
+          ) === ""
+        ) {
+          dispatch(addmsg({ query: queryResponseDetails.queryResponse }));
+          let msgs = [...chats];
+          msgs.push({
+            role: queryResponseDetails.queryResponse.role,
+            content: queryResponseDetails.queryResponse.content,
+          });
+          setChats(msgs);
+        }else{
+          const onlyText = extractMessageFromOutput(queryResponseDetails.queryResponse.content)
+          dispatch(addmsg({ query: onlyText }));
+          let msgs = [...chats];
+          msgs.push({
+            role: queryResponseDetails.queryResponse.role,
+            content: onlyText,
+          });
+          setChats(msgs);
+        }
+
+        const extractedlatex = extractData(
+          queryResponseDetails.queryResponse.content
+        );
+
+        const eachSectionHeading = extractEachSectionData(extractedlatex);
+        // console.log(eachSectionHeading ,extractedlatex );
+        if (extractedlatex !== "") {
+          switch (eachSectionHeading) {
             case "HEADING":
-               dispatch(addHeading(extractedlatex));
+              dispatch(addHeading(extractedlatex));
               break;
             case "EDUCATION":
               console.log("education reducx");
@@ -111,12 +147,10 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
             default:
               dispatch(addlatex(extractedlatex));
               break;
-           }
-           dispatch(addlatex(extractedlatex));
+          }
+          dispatch(addlatex(extractedlatex));
         }
-        
       }
-      
     }
   }, [queryResponseSuccess]);
 
@@ -129,40 +163,45 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
     // console.log(message);
     e.preventDefault();
     if (!message) return;
-    setIsTyping(true);
+    // setIsTyping(true);
     let msgs = [...chats];
     msgs.push({
       role: "user",
       content: message,
     });
     setChats(msgs);
-    dispatch(addmsg({ query: {
-      role : "user",
-      content : message
-    } }));
+    dispatch(
+      addmsg({
+        query: {
+          role: "user",
+          content: message,
+        },
+      })
+    );
 
     if (message) {
       setMessage("");
       dispatch(sendQuerydata({ msgs: msgs }));
     }
-  
 
-    setIsTyping(false);
+    // setIsTyping(false);
   };
+  console.log('====================================');
+  console.log(isTyping);
+  console.log('====================================');
+  
   return (
     <>
       {showAskVal ? (
         <div className="chat-container">
           <div className="chat-header">
-            <div
-              style={{ fontSize: "large", fontWeight: "600" }}
-            >
+            <div style={{ fontSize: "large", fontWeight: "600" }}>
               {" "}
               <RightOutlined onClick={() => setShowAskVal(!showAskVal)} />{" "}
               ChatBot
             </div>
             <div className="reset" style={{ textAlign: "right" }}>
-              <Button type="primary bg-black"  onClick={() => resetChat()}>
+              <Button type="primary bg-black" onClick={() => resetChat()}>
                 <ReloadOutlined />
                 Reset
               </Button>
@@ -176,7 +215,8 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                 <li className="message left spacing">
                   <span></span>
                   <span>
-                  Hi!, I am Auto Resume, your personal resume maker, You can interact with me here by asking about your Resume.
+                    Hi!, I am Auto Resume, your personal resume maker, You can
+                    interact with me here by asking about your Resume.
                     <br />
                   </span>
                 </li>
@@ -202,16 +242,13 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                       }
                     })
                   : ""}
+                  {isTyping  && <li className="left spacing typing"><DotTypingAnimation /></li>}
               </ul>
+              
             </div>
-            {isTyping ? (
-              <div style={{ textAlign: "center" }}>
-                <Spinner />
-              </div>
-            ) : (
               <div className="chat-box">
                 <div style={{ width: "85%", textAlign: "center" }}>
-                  <Input
+                  <Input.TextArea
                     style={{ height: 40 }}
                     placeholder="Send a message"
                     onChange={(e) => setMessage(e.target.value)}
@@ -229,7 +266,6 @@ const KrollSecureChat = ({ showAskVal, setShowAskVal, setLatexCode ,latexCode}) 
                   </Button>
                 </div>
               </div>
-            )}
           </div>
         </div>
       ) : (

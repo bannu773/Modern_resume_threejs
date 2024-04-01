@@ -9,6 +9,7 @@ const initialState = {
   queryResponse: {},
   error: "",
   status: "idle",
+  isTyping :false
 };
 
 
@@ -23,8 +24,6 @@ export const sendQuerydata = createAsyncThunk(
   "senddata/sendQuerydata",
   async (msgs, _thunkApi) => {
     try {
-
-
       ///////////////////////////////////////////////////// Chat GPT ////////////////////////////////////////////////////
 
       const chatCompletion = await openai.chat.completions.create({
@@ -121,14 +120,18 @@ export const sendQuerySlice = createSlice({
     builder
       .addCase(sendQuerydata.pending, (state, action) => {
         state.status = "loading";
+        state.isTyping = true
       })
       .addCase(sendQuerydata.fulfilled, (state, action) => {
         state.status = "success";
         state.queryResponse = action.payload;
+        state.isTyping = false
       })
       .addCase(sendQuerydata.rejected, (state, action) => {
+        state.isTyping = true;
         state.status = "failed";
         state.error = action.error.message ? action.error.message : null;
+        state.isTyping = false
       })
   },
 });

@@ -172,3 +172,24 @@
         ;
     }
 }
+@keyframes blink {
+    50% { opacity: 0; }
+  }
+  .typing{
+    background-color: #520088;
+    margin-left: 2px;
+    border-radius: 25px 25px 25px 0px;
+    margin-right: 20%;
+    text-align: left;
+    padding-left: 10px;
+    margin-top: 0.5%;
+    box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+
+  }
+  
+  .dot-typing {
+    width: 80px;
+    font-size: 24px; 
+    letter-spacing: 5px;
+    animation: blink 1s infinite;
+  }
