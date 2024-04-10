@@ -46,6 +46,7 @@ const KrollSecureChat = ({
   };
   const extractEachSectionData = (data) => {
     const regex = /----------\s*(.*?)----------/gs;
+    // const regex = /-+\s*(.?)\s-+([\s\S]?)(?=-+\s|$)/g;
 
     const matches = data.match(regex);
     if (matches && matches.length > 0) {
@@ -101,11 +102,12 @@ const KrollSecureChat = ({
           setChats(msgs);
         }else{
           const onlyText = extractMessageFromOutput(queryResponseDetails.queryResponse.content)
-          dispatch(addmsg({ query: onlyText }));
+          dispatch(addmsg({ query: queryResponseDetails.queryResponse }));
+          console.log(queryResponseDetails.queryResponse.content, "response");
           let msgs = [...chats];
           msgs.push({
             role: queryResponseDetails.queryResponse.role,
-            content: onlyText,
+            content: "Press Generate PDF to see Changes \n" + onlyText,
           });
           setChats(msgs);
         }
@@ -138,6 +140,8 @@ const KrollSecureChat = ({
               dispatch(addCertifications(extractedlatex));
               break;
             case "PROGRAMMINGSKILLS":
+            case "programming skills":
+            case "Programming Skills":
             case "Technical Skills":
             case "TechnicalSkills":
             case "Programming Skills":
@@ -222,7 +226,7 @@ const KrollSecureChat = ({
                 </li>
                 {chats && chats.length
                   ? chats.map((chat, index) => {
-                      if (chat.role.toUpperCase() === "USER" && index > 20) {
+                      if (chat.role.toUpperCase() === "USER" && index > 22) {
                         return (
                           <li key={index} className="message right spacing">
                             <span></span>
@@ -246,7 +250,7 @@ const KrollSecureChat = ({
               </ul>
               
             </div>
-              <div className="chat-box">
+              <div className="chat-box " style={{ pointerEvents: isTyping ? 'none' : 'auto' }}>
                 <div style={{ width: "85%", textAlign: "center" }}>
                   <Input.TextArea
                     style={{ height: 40 }}

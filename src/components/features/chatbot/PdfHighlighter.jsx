@@ -9,6 +9,7 @@ function PdfHighlighter({ showAskVal }) {
   const latexCode = useSelector((state) => state.latex);
   const [latex, setLatex] = useState("");
   useEffect(() => {
+    
     const latexx = `
       ${latexCode.format}
       ${latexCode.heading}
@@ -21,6 +22,9 @@ function PdfHighlighter({ showAskVal }) {
 
     `
     setLatex(latexx);
+    
+
+    
   
   }, [latexCode]);
   // useEffect(() => {
@@ -28,7 +32,7 @@ function PdfHighlighter({ showAskVal }) {
   //     latexcgi("pre0",`${latexCode} \\end{document}`)
   //   }
   // }, [latexCode])
-  console.log(latexCode.format);
+  
   return (
     <>
       <div className={showAskVal ? 'chatbot-pdf' : 'pdf-viewer-ask-val-collapse'}>

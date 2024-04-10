@@ -23,12 +23,14 @@ const openai = new OpenAI({
 export const sendQuerydata = createAsyncThunk(
   "senddata/sendQuerydata",
   async (msgs, _thunkApi) => {
+    const chats = [];
     try {
       ///////////////////////////////////////////////////// Chat GPT ////////////////////////////////////////////////////
 
       const chatCompletion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo-1106",
         messages: msgs.msgs,
+        temperature: 0,
       });
       console.log(chatCompletion.choices[0].message);
 

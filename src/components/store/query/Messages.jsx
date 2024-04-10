@@ -311,6 +311,14 @@ const initialState = {
           "role" : "user",
           "content" : "Please follow my Template and ask the user about each thing when user starts interacting."
         },
+        {
+          "role" : "user",
+          "content" : "Remember to generate the LaTeX code for each section as the user completes  it, generate the code without asking the user when he completes giving the instrctions and ensure that you follow the previous instructions.  or when users asks to generate latex code generate the code without asking the user."
+        },
+        {
+          "role" : "user",
+          "content" : "This is very important Instruction when you generate the latex code if it consists any special characters or symbols then you have to use the '/' before the special character or symbol to avoid errors. you must ensure it has only 10 dashes in the comments section." 
+        }
         
       ],
 };
